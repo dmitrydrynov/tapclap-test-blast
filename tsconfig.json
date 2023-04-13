@@ -7,7 +7,6 @@
     "module": "ESNext",
     // Rules for your code
     "strict": true,
-    "declaration": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedParameters": true,
