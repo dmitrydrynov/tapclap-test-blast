@@ -1,0 +1,30 @@
+{
+  "name": "tapclap-test-blast",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack serve --mode=development",
+    "build": "run-s clean build-only",
+    "build-only": "webpack --mode=production",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "fontfaceobserver": "^2.3.0",
+    "pixi.js": "^7.2.4",
+    "tweedle.js": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/fontfaceobserver": "^2.1.0",
+    "@types/node": "^18.15.11",
+    "@types/pixi.js": "^5.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "rimraf": "^5.0.0",
+    "terser-webpack-plugin": "^5.3.7",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.2"
+  }
+}
