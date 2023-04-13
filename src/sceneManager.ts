@@ -1,8 +1,4 @@
-import { Application, DisplayObject } from "pixi.js";
-
-export interface IScene extends DisplayObject {
-  update(framesPassed: number): void;
-}
+import { Application } from "pixi.js";
 
 export class SceneManager {
   constructor() {}
@@ -40,7 +36,7 @@ export class SceneManager {
     SceneManager.resize();
   }
 
-  public static changeScene(newScene: IScene) {
+  public static toScene(newScene: IScene) {
     if (SceneManager.currentScene) {
       SceneManager.app.stage.removeChild(SceneManager.currentScene);
       SceneManager.currentScene.destroy();

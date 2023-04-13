@@ -66,7 +66,11 @@ module.exports = (env, argv) =>
         '.tsx',
         '.ts',
         '.js'
-      ]
+      ],
+      alias: {
+        "@": path.resolve(__dirname, "src"),
+        "@scenes": path.resolve(__dirname, "src/scenes"),
+      }
     },
 
     plugins: [

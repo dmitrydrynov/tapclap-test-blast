@@ -1,11 +1,14 @@
-import { SceneManager } from "./sceneManager";
-import { LoaderScene } from "./scenes/loader";
+import { SceneManager } from "@/sceneManager";
+import { LoaderScene } from "@scenes/loader/loader.scene";
 import FontFaceObserver from "fontfaceobserver";
 
-let font = new FontFaceObserver("Marvin", {});
-font.load().then(() => {
-  SceneManager.initialize(1920, 1080, 0xffff00);
+const init = async () => {
+  let font = new FontFaceObserver("Marvin", {});
 
-  const loaderScene: LoaderScene = new LoaderScene();
-  SceneManager.changeScene(loaderScene);
-});
+  await font.load();
+
+  SceneManager.initialize(1920, 1080, 0xffff00);
+  SceneManager.toScene(new LoaderScene());
+};
+
+init();

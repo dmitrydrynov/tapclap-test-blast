@@ -20,6 +20,15 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "baseUrl": "src/",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@scenes/*": [
+        "scenes/*"
+      ],
+    }
   },
   // Folder for your code
   "include": [
