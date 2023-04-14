@@ -1,4 +1,7 @@
+import { GameScene } from "@/scenes/game/game.scene";
+
 export const gameConfig = {
+  firstScene: GameScene,
   levels: [
     {
       name: "Demo Level",

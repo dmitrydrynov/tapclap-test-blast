@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { SceneManager } from "@/sceneManager";
-import { ResultScene } from "@scenes/result/result.scene";
+import { ResultScene } from "@/scenes/result/result.scene";
 import { GameView } from "./game.view";
 
 export class GameScene extends Container implements IScene {

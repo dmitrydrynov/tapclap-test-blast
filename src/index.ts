@@ -1,5 +1,5 @@
 import { SceneManager } from "@/sceneManager";
-import { LoaderScene } from "@scenes/loader/loader.scene";
+import { LoaderScene } from "@/scenes/loader/loader.scene";
 import FontFaceObserver from "fontfaceobserver";
 
 const init = async () => {

@@ -1,8 +1,8 @@
 import { Assets, Container } from "pixi.js";
 import { SceneManager } from "@/sceneManager";
 import { manifest } from "@/assets";
-import { HomeScene } from "@scenes/home/home.scene";
 import { LoaderView } from "./loader.view";
+import { gameConfig } from "@/config/game";
 
 export class LoaderScene extends Container implements IScene {
   renderView: LoaderView;
@@ -29,7 +29,7 @@ export class LoaderScene extends Container implements IScene {
   }
 
   private gameLoaded(): void {
-    SceneManager.toScene(new HomeScene());
+    SceneManager.toScene(new gameConfig.firstScene());
   }
 
   update() {}

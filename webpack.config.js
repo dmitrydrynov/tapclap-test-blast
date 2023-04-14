@@ -69,9 +69,6 @@ module.exports = (env, argv) =>
       ],
       alias: {
         "@": path.resolve(__dirname, "src"),
-        "@scenes": path.resolve(__dirname, "src/scenes"),
-        "@helpers": path.resolve(__dirname, "src/helpers"),
-        "@config": path.resolve(__dirname, "src/config"),
       }
     },
 
