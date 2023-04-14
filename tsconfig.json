@@ -30,6 +30,9 @@
       "@helpers/*": [
         "helpers/*"
       ],
+      "@config/*": [
+        "config/*"
+      ],
     }
   },
   // Folder for your code
