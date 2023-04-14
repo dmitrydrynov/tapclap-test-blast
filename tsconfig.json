@@ -27,6 +27,9 @@
       "@scenes/*": [
         "scenes/*"
       ],
+      "@helpers/*": [
+        "helpers/*"
+      ],
     }
   },
   // Folder for your code
