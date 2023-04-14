@@ -1,9 +1,11 @@
 import { Container, TextStyle, Text } from "pixi.js";
+import { GameBoard } from "./components/game-board";
 
 export class GameView extends Container {
   text: Text;
+  board: Container;
 
-  constructor(scene: Container) {
+  constructor(scene: IScene) {
     super();
 
     const style: TextStyle = new TextStyle({
@@ -15,5 +17,8 @@ export class GameView extends Container {
 
     this.text = new Text("Game Scene", style);
     scene.addChild(this.text);
+
+    this.board = new GameBoard(scene.levelConfig);
+    scene.addChild(this.board);
   }
 }
