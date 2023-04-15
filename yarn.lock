@@ -287,6 +287,15 @@
     "@pixi/settings" "7.2.4"
     "@pixi/utils" "7.2.4"
 
+"@pixi/ui@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@pixi/ui/-/ui-0.7.0.tgz#589fa6c57ac1f63b8f6e070485e4a69f13ae50e3"
+  integrity sha512-zKTd5OH8Xi1Ap4jofjuvW6OXGNfZ603+2yySuPKjLEOTZ8QYf1GKbA1iDlRI1S7EZEmfk1SNF3/mQkqOMs/nrw==
+  dependencies:
+    ts-mixer "^6.0.3"
+    tweedle.js "^2.0.1"
+    typed-signals "^2.5.0"
+
 "@pixi/utils@7.2.4":
   version "7.2.4"
   resolved "https://registry.npmjs.org/@pixi/utils/-/utils-7.2.4.tgz"
@@ -3193,12 +3202,17 @@ ts-loader@^9.4.2:
     micromatch "^4.0.0"
     semver "^7.3.4"
 
+ts-mixer@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/ts-mixer/-/ts-mixer-6.0.3.tgz#69bd50f406ff39daa369885b16c77a6194c7cae6"
+  integrity sha512-k43M7uCG1AkTyxgnmI5MPwKoUvS/bRvLvUb7+Pgpdlmok8AoqmUaZxUUw8zKM5B1lqZrt41GjYgnvAi0fppqgQ==
+
 tslib@^2.0.3:
   version "2.5.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
 
-tweedle.js@^2.1.0:
+tweedle.js@^2.0.1, tweedle.js@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/tweedle.js/-/tweedle.js-2.1.0.tgz"
   integrity sha512-0ReQgVjepoZkE6t0upWNgCRbplHkQJQYk1LStXugwSR728GLFmGDRuaQJlxeC/iBlxud6+P1RdODjaO25vHAqw==
@@ -3224,6 +3238,11 @@ typed-function@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/typed-function/-/typed-function-4.1.0.tgz#da4bdd8a6d19a89e22732f75e4a410860aaf9712"
   integrity sha512-DGwUl6cioBW5gw2L+6SMupGwH/kZOqivy17E4nsh1JI9fKF87orMmlQx3KISQPmg3sfnOUGlwVkroosvgddrlg==
+
+typed-signals@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/typed-signals/-/typed-signals-2.5.0.tgz#7be73505c2ee0dc4e43f1c4ee002c855796bd89a"
+  integrity sha512-m9lHc3eBCJerXYdx+G0uWZihyUXdqTzzgOdqiDDsoUo75WjhFJH6vP5/6w/xhyu04zoxHUqgYhf9FEt85dk/Ng==
 
 typescript@^5.0.4:
   version "5.0.4"

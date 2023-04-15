@@ -9,14 +9,14 @@ export const gameConfig: IGameConfig = {
         columns: 8,
         rows: 8,
       },
-      tails: ["red", "blue", "green", "purple", "yellow"],
+      tiles: ["red", "blue", "green", "purple", "yellow"],
       goal: {
         steps: 25,
         score: 100,
       },
     },
   ],
-  tails: [
+  tiles: [
     { name: "red", color: "ff0000", type: "basic" },
     { name: "blue", color: "0000ff", type: "basic" },
     { name: "green", color: "00ff00", type: "basic" },

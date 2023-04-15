@@ -5,11 +5,11 @@ export const manifest: ResolverManifest = {
     {
       name: "homeScreenBundle",
       assets: {
-        boxBlue: "./sprites/box-blue.png",
-        boxGreen: "./sprites/box-green.png",
-        boxPurple: "./sprites/box-purple.png",
-        boxRed: "./sprites/box-red.png",
-        boxYellow: "./sprites/box-yellow.png",
+        "tile-blue": "./sprites/box-blue.png",
+        "tile-green": "./sprites/box-green.png",
+        "tile-purple": "./sprites/box-purple.png",
+        "tile-red": "./sprites/box-red.png",
+        "tile-yellow": "./sprites/box-yellow.png",
         scoreBlock: "./sprites/score-block.png",
       },
     },

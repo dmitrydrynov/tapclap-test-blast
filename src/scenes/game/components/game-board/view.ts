@@ -1,25 +1,26 @@
-import { SceneManager } from "@/sceneManager";
 import { Container, Graphics } from "pixi.js";
 import * as math from "mathjs";
 import { randomInteger } from "@/helpers/math";
-import { BoardTail } from "../tail";
+import { BoardTile } from "../tile";
 import { gameConfig } from "@/config/game";
+import { GameBoard } from ".";
 
 export class GameBoardView extends Container {
-  constructor(scene: Container, levelConfig: ILevelConfig) {
+  tilesMap: math.Matrix;
+  tiles: math.Matrix;
+
+  constructor(scene: GameBoard) {
     super();
 
     const {
       board: { columns, rows },
-      tails,
-    } = levelConfig;
+      tiles,
+    } = scene.levelConfig;
 
     const cellSize = gameConfig.cellSize;
     const borderSize = 10;
     const width = columns * cellSize;
     const height = rows * cellSize;
-    const x = (SceneManager.width - width) / 2;
-    const y = (SceneManager.height - height) / 2;
 
     /** Createe board */
     const board = new Graphics();
@@ -46,22 +47,27 @@ export class GameBoardView extends Container {
       height + borderSize / 2
     );
 
-    board.position.x = x;
-    board.position.y = y;
     scene.addChild(board);
 
-    /** Create Tails */
-    const zeroTails = math.zeros(columns, rows);
-    const fillTails = zeroTails.map(() => randomInteger(0, tails.length - 1));
+    /** Create Tiles */
+    this.tilesMap = math
+      .zeros(columns, rows)
+      .map(() => randomInteger(0, tiles.length - 1)) as math.Matrix;
 
-    /** Draw tails */
-    let tailsContainers: BoardTail[] = [];
-    fillTails.map((value, idx) => {
-      const newTail = new BoardTail(value, Array.isArray(idx) ? idx : [idx]);
-      tailsContainers.push(newTail);
-      scene.addChild(newTail);
+    console.log(this.tilesMap.toString());
+
+    /** Draw tiles */
+    this.tiles = this.tilesMap.map((tileIndex, coord) => {
+      const newTile = new BoardTile(
+        tileIndex,
+        Array.isArray(coord) ? coord : [coord]
+      );
+      scene.addChild(newTile);
+
+      newTile.eventMode = "dynamic";
+      newTile.on("pointertap", () => scene.onTileClick(newTile));
+
+      return newTile;
     });
-
-    console.log(fillTails.toString());
   }
 }

@@ -9,6 +9,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@pixi/ui": "^0.7.0",
     "@types/mathjs": "^9.4.2",
     "fontfaceobserver": "^2.3.0",
     "mathjs": "^11.8.0",

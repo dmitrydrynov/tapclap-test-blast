@@ -13,14 +13,14 @@ declare module "pixi.js" {
 
 declare global {
   export interface IScene extends Container {
-    renderView: IRenderView;
-    levelConfig?: ILevelConfig;
+    renderView: ISceneView;
     update(framesPassed: number): void;
   }
 
-  export interface IRenderView {}
-  export interface IBoardTail extends Container {
-    tailConfig: IBoardTailConfig;
+  export interface ISceneView {}
+
+  export interface IBoardTile extends Container {
+    tileConfig: IBoardTileConfig;
     coord: number[];
   }
 
@@ -32,14 +32,14 @@ declare global {
       columns: number;
       rows: number;
     };
-    tails: string[];
+    tiles: string[];
     goal: {
       steps: number;
       score: number;
     };
   }
 
-  export interface IBoardTailConfig {
+  export interface IBoardTileConfig {
     name: string;
     color: string;
     type: "basic";
@@ -48,6 +48,6 @@ declare global {
   export interface IGameConfig {
     cellSize: number;
     levels: ILevelConfig[];
-    tails: IBoardTailConfig[];
+    tiles: IBoardTileConfig[];
   }
 }
