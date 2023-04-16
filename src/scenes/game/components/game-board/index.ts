@@ -19,6 +19,10 @@ export class GameBoard extends Container {
 
   onBoardUpdate() {
     console.log("onBoardUpdate");
+
+    if (!this.playability()) {
+      console.log("you can not play");
+    }
   }
 
   refresh() {
@@ -28,6 +32,23 @@ export class GameBoard extends Container {
 
     this.renderView = new GameBoardView(this);
     this.emit<any>("boardUpdate");
+  }
+
+  playability() {
+    const { tiles } = this.renderView;
+    let relativesParts: BoardTile[][] = [];
+
+    tiles.map((tile) => {
+      if (tile === null) return;
+
+      const relatives = this.getRelatives(tile);
+
+      if (relatives.length >= this.levelConfig.minBurnGroup) {
+        relativesParts.push(relatives);
+      }
+    });
+
+    return relativesParts.length > 0;
   }
 
   onTileClick(tile: BoardTile) {
@@ -88,12 +109,12 @@ export class GameBoard extends Container {
 
     const neighbours = tiles.subset(math.index(rowsForSearch, colsForSearch));
 
-    console.log(
-      "neighbours",
-      neighbours.map((n) => {
-        return n !== null ? n.coord : null;
-      })
-    );
+    // console.log(
+    //   "neighbours",
+    //   neighbours.map((n) => {
+    //     return n !== null ? n.coord : null;
+    //   })
+    // );
 
     neighbours.map((neighbour: BoardTile) => {
       if (
@@ -103,7 +124,7 @@ export class GameBoard extends Container {
         (neighbour.coord.col == col || neighbour.coord.row == row) && // if the same row or col
         (!exclude || !exclude.includes(neighbour)) // ecxlude
       ) {
-        console.log("relatives", neighbour.coord);
+        // console.log("relatives", neighbour.coord);
         relatives.push(neighbour);
       }
     });
