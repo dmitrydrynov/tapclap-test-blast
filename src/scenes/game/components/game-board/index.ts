@@ -31,10 +31,17 @@ export class GameBoard extends Container {
   }
 
   onTileClick(tile: BoardTile) {
+    console.log("click to", tile.index, tile.coord);
+
+    const { tiles } = this.renderView;
+
     let relatives = this.getRelatives(tile);
 
     if (relatives.length >= this.levelConfig.minBurnGroup) {
-      relatives.map((t) => t.destroy());
+      relatives.map((t) => {
+        t.destroy();
+        tiles.set([t.coord.row, t.coord.col], null);
+      });
 
       this.emit<any>("boardUpdate");
     }
@@ -55,6 +62,7 @@ export class GameBoard extends Container {
   }
 
   getCloseRelatives(tile: BoardTile, exclude: BoardTile[] = []) {
+    const relatives: BoardTile[] = [];
     const { tiles } = this.renderView;
     const { col, row } = tile.coord;
     const colsForSearch = [col - 1, col, col + 1];
@@ -78,16 +86,24 @@ export class GameBoard extends Container {
         break;
     }
 
-    const neighbours = tiles.subset(math.index(colsForSearch, rowsForSearch));
-    const relatives: BoardTile[] = [];
+    const neighbours = tiles.subset(math.index(rowsForSearch, colsForSearch));
+
+    console.log(
+      "neighbours",
+      neighbours.map((n) => {
+        return n !== null ? n.coord : null;
+      })
+    );
 
     neighbours.map((neighbour: BoardTile) => {
       if (
-        neighbour !== tile &&
+        neighbour !== null &&
+        neighbour.coord !== tile.coord &&
         neighbour.index == tile.index && // if the same tile
         (neighbour.coord.col == col || neighbour.coord.row == row) && // if the same row or col
         (!exclude || !exclude.includes(neighbour)) // ecxlude
       ) {
+        console.log("relatives", neighbour.coord);
         relatives.push(neighbour);
       }
     });

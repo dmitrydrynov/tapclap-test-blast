@@ -54,14 +54,9 @@ export class GameBoardView extends Container {
       .zeros(columns, rows)
       .map(() => randomInteger(0, tiles.length - 1)) as math.Matrix;
 
-    console.log(this.tilesMap.toString());
-
     /** Draw tiles */
-    this.tiles = this.tilesMap.map((tileIndex, coord) => {
-      const newTile = new BoardTile(
-        tileIndex,
-        Array.isArray(coord) ? coord : [coord]
-      );
+    this.tiles = this.tilesMap.map((tileIndex, [row, col]) => {
+      const newTile = new BoardTile(tileIndex, { col, row });
       scene.addChild(newTile);
 
       newTile.eventMode = "dynamic";
@@ -69,5 +64,7 @@ export class GameBoardView extends Container {
 
       return newTile;
     });
+
+    console.log(this.tilesMap.toString());
   }
 }

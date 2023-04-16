@@ -5,20 +5,14 @@ import { gameConfig } from "@/config/game";
 export class BoardTile extends Container {
   index: number;
   renderView: BoardTileView;
-  coord: {
-    col: number;
-    row: number;
-  };
+  coord: TCoord;
   config: IBoardTileConfig;
 
-  constructor(index: number, coord: number[]) {
+  constructor(index: number, coord: TCoord) {
     super();
 
     this.index = index;
-    this.coord = {
-      col: coord[0],
-      row: coord[1],
-    };
+    this.coord = coord;
     this.config = gameConfig.tiles[this.index];
     this.renderView = new BoardTileView(this);
   }

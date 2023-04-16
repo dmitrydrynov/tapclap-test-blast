@@ -19,6 +19,11 @@ declare global {
 
   export interface ISceneView {}
 
+  export type TCoord = {
+    col: number;
+    row: number;
+  };
+
   export interface IBoardTile extends Container {
     tileConfig: IBoardTileConfig;
     coord: number[];

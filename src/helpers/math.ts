@@ -4,7 +4,7 @@ export const randomInteger = (min: number, max: number) => {
 };
 
 export const coordToPosition = (
-  coord: { col: number; row: number },
+  coord: TCoord,
   cellSize: number
 ) => {
   return {
