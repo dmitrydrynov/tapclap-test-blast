@@ -14,6 +14,10 @@ export class GameBoard extends Container {
     this.renderView = new GameBoardView(this);
 
     this.on<any>("boardUpdate", this.onBoardUpdate, this);
+    this.boardUpdate();
+  }
+
+  boardUpdate() {
     this.emit<any>("boardUpdate");
   }
 
@@ -23,6 +27,8 @@ export class GameBoard extends Container {
     if (!this.playability()) {
       console.log("you can not play");
     }
+
+    this.fillEmptyBlocks();
   }
 
   refresh() {
@@ -31,7 +37,7 @@ export class GameBoard extends Container {
     }
 
     this.renderView = new GameBoardView(this);
-    this.emit<any>("boardUpdate");
+    this.boardUpdate();
   }
 
   playability() {
@@ -64,7 +70,7 @@ export class GameBoard extends Container {
         tiles.set([t.coord.row, t.coord.col], null);
       });
 
-      this.emit<any>("boardUpdate");
+      this.boardUpdate();
     }
   }
 
@@ -109,13 +115,6 @@ export class GameBoard extends Container {
 
     const neighbours = tiles.subset(math.index(rowsForSearch, colsForSearch));
 
-    // console.log(
-    //   "neighbours",
-    //   neighbours.map((n) => {
-    //     return n !== null ? n.coord : null;
-    //   })
-    // );
-
     neighbours.map((neighbour: BoardTile) => {
       if (
         neighbour !== null &&
@@ -124,11 +123,42 @@ export class GameBoard extends Container {
         (neighbour.coord.col == col || neighbour.coord.row == row) && // if the same row or col
         (!exclude || !exclude.includes(neighbour)) // ecxlude
       ) {
-        // console.log("relatives", neighbour.coord);
         relatives.push(neighbour);
       }
     });
 
     return relatives;
+  }
+
+  fillEmptyBlocks() {
+    const { tiles } = this.renderView;
+
+    for (let col = 0; col < this.levelConfig.board.columns; col++) {
+      for (let row = this.levelConfig.board.rows - 1; row >= 0; row--) {
+        let lastRow = row + 1;
+        const tile: BoardTile | null = tiles.get([row, col]);
+        let tileBelow: BoardTile | null | undefined =
+          row < this.levelConfig.board.rows - 1
+            ? tiles.get([lastRow, col])
+            : undefined;
+
+        if (tile && tileBelow === null) {
+          while (tileBelow === null) {
+            lastRow++;
+            tileBelow =
+              lastRow <= this.levelConfig.board.rows - 1
+                ? tiles.get([lastRow, col])
+                : undefined;
+          }
+
+          tiles.set([row, col], null);
+          tiles.set([lastRow - 1, col], tile);
+
+          tile.moveTo({ row: lastRow - 1, col }, () => {
+            this.boardUpdate();
+          });
+        }
+      }
+    }
   }
 }

@@ -1,5 +1,4 @@
 import { gameConfig } from "@/config/game";
-import { coordToPosition } from "@/helpers/math";
 import { Container, Sprite, Text } from "pixi.js";
 import { BoardTile } from ".";
 
@@ -19,8 +18,6 @@ export class BoardTileView extends Container {
 
     this.sprite.anchor.x = 0.5;
     this.sprite.anchor.y = 0.5;
-
-    this.sprite.position = coordToPosition(boardTile.coord, cellSize);
 
     boardTile.addChild(this.sprite);
 
