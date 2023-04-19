@@ -67,12 +67,16 @@ export class GameBoard extends Container {
     let relatives = this.getRelatives(tile);
 
     if (relatives.length >= this.levelConfig.minBurnGroup) {
-      relatives.map((t) => {
-        t.destroy();
-        tiles.set([t.coord.row, t.coord.col], null);
-      });
+      for (const t of relatives) {
+        const _coord = t.coord;
+        tiles.set([_coord.row, _coord.col], null);
 
-      this.boardUpdate();
+        t.remove(() => {
+          this.removeChild(t);
+
+          this.boardUpdate();
+        });
+      }
     }
   }
 
@@ -82,9 +86,9 @@ export class GameBoard extends Container {
     const closeRelatives = this.getCloseRelatives(currentTile, relatives);
 
     if (closeRelatives.length > 0) {
-      closeRelatives.map((tile) => {
+      for (const tile of closeRelatives) {
         this.getRelatives(tile, relatives);
-      });
+      }
     }
 
     return relatives;

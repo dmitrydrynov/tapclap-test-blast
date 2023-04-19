@@ -24,6 +24,17 @@ export class BoardTile extends Container {
     Ticker.shared.add(this.update, this);
   }
 
+  remove(callback = () => {}) {
+    new Tween(this)
+      .to({ scale: { x: 0.5, y: 0.5 }, alpha: 0 }, 250)
+      .easing(Easing.Back.In)
+      .start()
+      .onComplete(() => {
+        this.destroy();
+        callback();
+      });
+  }
+
   moveTo(newCoord: TCoord, callback = () => {}) {
     const newPosition = coordToPosition(newCoord);
     this.coord = newCoord;
