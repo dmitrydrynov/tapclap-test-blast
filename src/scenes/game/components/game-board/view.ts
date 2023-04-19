@@ -16,7 +16,7 @@ export class GameBoardView extends Container {
 
     const {
       board: { columns, rows },
-    } = component.levelConfig;
+    } = component.options.levelConfig;
 
     const cellSize = gameConfig.cellSize;
     const borderSize = 10;

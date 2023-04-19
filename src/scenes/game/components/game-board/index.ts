@@ -7,15 +7,19 @@ import { gameConfig } from "@/config/game";
 
 export class GameBoard extends Container {
   renderView: GameBoardView;
-  levelConfig: ILevelConfig;
+  options: {
+    levelConfig: ILevelConfig;
+    onMovesEnd: () => void;
+  };
 
-  constructor(levelConfig: ILevelConfig) {
+  constructor(options: any) {
     super();
 
-    this.levelConfig = levelConfig;
+    this.options = options;
     this.renderView = new GameBoardView(this);
 
     this.on<any>("boardUpdate", this.onBoardUpdate, this);
+    this.on<any>("movesEnd", this.options.onMovesEnd, this);
     this.boardUpdate();
   }
 
@@ -28,6 +32,7 @@ export class GameBoard extends Container {
 
     if (!this.playability()) {
       console.log("you can not play");
+      this.emit<any>("movesEnd");
     }
 
     this.fillEmptyBlocks();
@@ -51,7 +56,7 @@ export class GameBoard extends Container {
 
       const relatives = this.getRelatives(tile);
 
-      if (relatives.length >= this.levelConfig.minBurnGroup) {
+      if (relatives.length >= this.options.levelConfig.minBurnGroup) {
         relativesParts.push(relatives);
       }
     });
@@ -66,7 +71,7 @@ export class GameBoard extends Container {
 
     let relatives = this.getRelatives(tile);
 
-    if (relatives.length >= this.levelConfig.minBurnGroup) {
+    if (relatives.length >= this.options.levelConfig.minBurnGroup) {
       for (const t of relatives) {
         const _coord = t.coord;
         tiles.set([_coord.row, _coord.col], null);
@@ -105,7 +110,7 @@ export class GameBoard extends Container {
       case 0:
         colsForSearch.shift();
         break;
-      case this.levelConfig.board.columns - 1:
+      case this.options.levelConfig.board.columns - 1:
         colsForSearch.pop();
         break;
     }
@@ -114,7 +119,7 @@ export class GameBoard extends Container {
       case 0:
         rowsForSearch.shift();
         break;
-      case this.levelConfig.board.rows - 1:
+      case this.options.levelConfig.board.rows - 1:
         rowsForSearch.pop();
         break;
     }
@@ -139,13 +144,13 @@ export class GameBoard extends Container {
   fillEmptyBlocks() {
     const { tiles } = this.renderView;
 
-    for (let col = 0; col < this.levelConfig.board.columns; col++) {
-      for (let row = this.levelConfig.board.rows - 1; row >= 0; row--) {
+    for (let col = 0; col < this.options.levelConfig.board.columns; col++) {
+      for (let row = this.options.levelConfig.board.rows - 1; row >= 0; row--) {
         const tile: BoardTile | null = tiles.get([row, col]);
         let lastRow = row + 1;
         let newTopTile: BoardTile | null = null;
         let tileBelow: BoardTile | null | undefined =
-          row < this.levelConfig.board.rows - 1
+          row < this.options.levelConfig.board.rows - 1
             ? tiles.get([lastRow, col])
             : undefined;
 
@@ -154,7 +159,7 @@ export class GameBoard extends Container {
           while (tileBelow === null) {
             lastRow++;
             tileBelow =
-              lastRow <= this.levelConfig.board.rows - 1
+              lastRow <= this.options.levelConfig.board.rows - 1
                 ? tiles.get([lastRow, col])
                 : undefined;
           }
@@ -181,7 +186,7 @@ export class GameBoard extends Container {
   }
 
   getRandomIndex() {
-    const { tiles } = this.levelConfig;
+    const { tiles } = this.options.levelConfig;
 
     return randomInteger(0, tiles.length - 1);
   }
@@ -200,5 +205,17 @@ export class GameBoard extends Container {
     this.addChild(newTile);
 
     return newTile;
+  }
+
+  shuffle() {
+    const { tiles } = this.renderView;
+    const oldTiles = Object.assign({}, tiles);
+
+    tiles.forEach((tile, [row, col]) => {
+      let newCol = Math.floor(Math.random() * (col + 1));
+      let newRow = Math.floor(Math.random() * (row + 1));
+
+      oldTiles.set([newRow, newCol], tile);
+    });
   }
 }

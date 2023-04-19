@@ -1,10 +1,12 @@
 import { Container } from "pixi.js";
 import { GameView } from "./game.view";
 import { gameConfig } from "@/config/game";
+import { RefreshModal } from "@/components/refresh-modal/component";
 
 export class GameScene extends Container implements IScene {
   renderView: GameView;
   levelConfig: ILevelConfig;
+  refreshModal: RefreshModal;
 
   constructor() {
     super();
@@ -12,15 +14,27 @@ export class GameScene extends Container implements IScene {
     this.levelConfig = gameConfig.levels[0];
     this.renderView = new GameView(this);
 
+    this.refreshModal = new RefreshModal({
+      width: 900,
+      height: 500,
+      onRefreshClick: this.onRefreshClick.bind(this),
+    });
+
     const { refreshBtn } = this.renderView;
 
     refreshBtn.onPress.connect(() => {
-      this.onClickText();
+      this.renderView.gameBoard.refresh();
     });
   }
 
-  onClickText() {
+  onRefreshClick() {
     this.renderView.gameBoard.refresh();
+    // this.refreshModal.close();
+    this.removeChild(this.refreshModal);
+  }
+
+  onMovesEnd() {
+    this.refreshModal.open(this)
   }
 
   update() {}

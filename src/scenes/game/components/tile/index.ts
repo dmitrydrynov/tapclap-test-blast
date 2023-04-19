@@ -30,8 +30,9 @@ export class BoardTile extends Container {
       .easing(Easing.Back.In)
       .start()
       .onComplete(() => {
-        this.destroy();
         callback();
+
+        setTimeout(() => this.destroy(), 250);
       });
   }
 

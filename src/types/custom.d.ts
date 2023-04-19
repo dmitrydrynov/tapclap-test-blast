@@ -1,4 +1,4 @@
-import { Container, DisplayObject } from "pixi.js";
+import { Container, DisplayObject, TextStyle } from "pixi.js";
 
 export * from "pixi.js";
 
@@ -52,6 +52,7 @@ declare global {
 
   export interface IGameConfig {
     cellSize: number;
+    textStyle: { [key: string]: TextStyle };
     levels: ILevelConfig[];
     tiles: IBoardTileConfig[];
   }

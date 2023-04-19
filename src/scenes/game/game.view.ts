@@ -1,4 +1,4 @@
-import { Container, TextStyle, Text } from "pixi.js";
+import { Container, Text } from "pixi.js";
 import { GameBoard } from "./components/game-board";
 import { SceneManager } from "@/sceneManager";
 import { gameConfig } from "@/config/game";
@@ -12,19 +12,12 @@ export class GameView extends Container implements ISceneView {
   constructor(scene: GameScene) {
     super();
 
-    const style: TextStyle = new TextStyle({
-      align: "center",
-      fill: "#000000",
-      fontSize: 42,
-      fontFamily: "Marvin",
-    });
-
     const {
       board: { columns, rows },
     } = scene.levelConfig;
 
     this.refreshBtn = new FancyButton({
-      text: new Text("Refresh", style),
+      text: new Text("Refresh", gameConfig.textStyle.title),
       animations: {
         hover: {
           props: {
@@ -40,7 +33,10 @@ export class GameView extends Container implements ISceneView {
     this.refreshBtn.position.set(150, SceneManager.height / 2);
     scene.addChild(this.refreshBtn);
 
-    this.gameBoard = new GameBoard(scene.levelConfig);
+    this.gameBoard = new GameBoard({
+      levelConfig: scene.levelConfig,
+      onMovesEnd: scene.onMovesEnd.bind(scene),
+    });
     const width = columns * gameConfig.cellSize;
     const height = rows * gameConfig.cellSize;
     this.gameBoard.position.x = (SceneManager.width - width) / 2;

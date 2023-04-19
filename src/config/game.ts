@@ -1,9 +1,25 @@
+import { TextStyle } from "pixi.js";
+
 export const gameConfig: IGameConfig = {
   cellSize: 100,
+  textStyle: {
+    title: new TextStyle({
+      align: "center",
+      fill: "#000000",
+      fontSize: 42,
+      fontFamily: "Marvin",
+    }),
+    text: new TextStyle({
+      align: "center",
+      fill: "#000000",
+      fontSize: 36,
+      fontFamily: "Marvin",
+    }),
+  },
   levels: [
     {
       name: "Demo Level",
-      minBurnGroup: 2,
+      minBurnGroup: 6,
       mixingAttempts: 3,
       board: {
         columns: 8,
