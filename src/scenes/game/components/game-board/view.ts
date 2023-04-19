@@ -8,13 +8,15 @@ import { GameBoard } from ".";
 export class GameBoardView extends Container {
   tilesMap: math.Matrix;
   tiles: math.Matrix;
+  scene: GameBoard;
 
   constructor(scene: GameBoard) {
     super();
 
+    this.scene = scene;
+
     const {
       board: { columns, rows },
-      tiles,
     } = scene.levelConfig;
 
     const cellSize = gameConfig.cellSize;
@@ -49,10 +51,10 @@ export class GameBoardView extends Container {
 
     scene.addChild(board);
 
-    /** Create Tiles */
+    /** Create tiles map */
     this.tilesMap = math
       .zeros(columns, rows)
-      .map(() => randomInteger(0, tiles.length - 1)) as math.Matrix;
+      .map(() => this.getRandomIndex()) as math.Matrix;
 
     /** Draw tiles */
     this.tiles = this.tilesMap.map((tileIndex, [row, col]) => {
@@ -66,5 +68,21 @@ export class GameBoardView extends Container {
     });
 
     console.log(this.tilesMap.toString());
+  }
+
+  getRandomIndex() {
+    const { tiles } = this.scene.levelConfig;
+
+    return randomInteger(0, tiles.length - 1);
+  }
+
+  addRandomTile(coord: TCoord) {
+    const newTile = new BoardTile(this.getRandomIndex(), coord);
+    newTile.eventMode = "dynamic";
+    newTile.on("pointertap", () => this.scene.onTileClick(newTile));
+    newTile.position.y -= gameConfig.cellSize;
+    this.scene.addChild(newTile);
+
+    return newTile;
   }
 }

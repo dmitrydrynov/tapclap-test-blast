@@ -142,6 +142,7 @@ export class GameBoard extends Container {
             ? tiles.get([lastRow, col])
             : undefined;
 
+        /** if block is hanging then move down */
         if (tile && tileBelow === null) {
           while (tileBelow === null) {
             lastRow++;
@@ -156,6 +157,15 @@ export class GameBoard extends Container {
 
           tile.moveTo({ row: lastRow - 1, col }, () => {
             this.boardUpdate();
+
+            if (tiles.get([0, col]) === null) {
+              console.log("new tile");
+
+              const newTile = this.renderView.addRandomTile({ col, row: 0 });
+              tiles.set([0, col], newTile);
+              newTile.moveTo({ col, row: 0 });
+              this.boardUpdate();
+            }
           });
         }
       }

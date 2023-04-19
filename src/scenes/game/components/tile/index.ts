@@ -29,8 +29,8 @@ export class BoardTile extends Container {
     this.coord = newCoord;
 
     new Tween(this.position)
-      .to(newPosition, 600)
-      .easing(Easing.Bounce.Out)
+      .to(newPosition, 300)
+      .easing(Easing.Sinusoidal.In)
       .start()
       .onComplete(() => {
         callback();
