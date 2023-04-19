@@ -28,8 +28,21 @@ export class BoardTile extends Container {
     const newPosition = coordToPosition(newCoord);
     this.coord = newCoord;
 
-    new Tween(this.position)
-      .to(newPosition, 300)
+    new Tween(this)
+      .to(newPosition, 250)
+      .easing(Easing.Sinusoidal.In)
+      .start()
+      .onComplete(() => {
+        callback();
+      });
+  }
+
+  moveToWithAlpha(newCoord: TCoord, callback = () => {}) {
+    const newPosition = coordToPosition(newCoord);
+    this.coord = newCoord;
+
+    new Tween(this)
+      .to({ ...newPosition, alpha: 1 }, 250)
       .easing(Easing.Sinusoidal.In)
       .start()
       .onComplete(() => {

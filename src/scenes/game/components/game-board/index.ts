@@ -2,6 +2,8 @@ import { Container } from "pixi.js";
 import { GameBoardView } from "./view";
 import { BoardTile } from "../tile";
 import * as math from "mathjs";
+import { randomInteger } from "@/helpers/math";
+import { gameConfig } from "@/config/game";
 
 export class GameBoard extends Container {
   renderView: GameBoardView;
@@ -135,8 +137,9 @@ export class GameBoard extends Container {
 
     for (let col = 0; col < this.levelConfig.board.columns; col++) {
       for (let row = this.levelConfig.board.rows - 1; row >= 0; row--) {
-        let lastRow = row + 1;
         const tile: BoardTile | null = tiles.get([row, col]);
+        let lastRow = row + 1;
+        let newTopTile: BoardTile | null = null;
         let tileBelow: BoardTile | null | undefined =
           row < this.levelConfig.board.rows - 1
             ? tiles.get([lastRow, col])
@@ -155,20 +158,43 @@ export class GameBoard extends Container {
           tiles.set([row, col], null);
           tiles.set([lastRow - 1, col], tile);
 
+          // animate moving
           tile.moveTo({ row: lastRow - 1, col }, () => {
             this.boardUpdate();
-
-            if (tiles.get([0, col]) === null) {
-              console.log("new tile");
-
-              const newTile = this.renderView.addRandomTile({ col, row: 0 });
-              tiles.set([0, col], newTile);
-              newTile.moveTo({ col, row: 0 });
-              this.boardUpdate();
-            }
           });
+        }
+
+        // if top block is empty then add new one
+        if (row == 0 && tile === null) {
+          newTopTile = this.addTopTile(col);
+          tiles.set([0, col], newTopTile);
+
+          // animate adding new block
+          newTopTile.moveToWithAlpha({ col, row: 0 }, () => this.boardUpdate());
         }
       }
     }
+  }
+
+  getRandomIndex() {
+    const { tiles } = this.levelConfig;
+
+    return randomInteger(0, tiles.length - 1);
+  }
+
+  addTopTile(col: number) {
+    const newTile = new BoardTile(this.getRandomIndex(), {
+      col,
+      row: 0,
+    });
+    newTile.position.y -= gameConfig.cellSize;
+    newTile.alpha = 0;
+
+    newTile.eventMode = "dynamic";
+    newTile.on("pointertap", () => this.onTileClick(newTile));
+
+    this.addChild(newTile);
+
+    return newTile;
   }
 }

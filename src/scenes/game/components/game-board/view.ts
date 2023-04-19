@@ -1,6 +1,5 @@
 import { Container, Graphics } from "pixi.js";
 import * as math from "mathjs";
-import { randomInteger } from "@/helpers/math";
 import { BoardTile } from "../tile";
 import { gameConfig } from "@/config/game";
 import { GameBoard } from ".";
@@ -8,16 +7,16 @@ import { GameBoard } from ".";
 export class GameBoardView extends Container {
   tilesMap: math.Matrix;
   tiles: math.Matrix;
-  scene: GameBoard;
+  component: GameBoard;
 
-  constructor(scene: GameBoard) {
+  constructor(component: GameBoard) {
     super();
 
-    this.scene = scene;
+    this.component = component;
 
     const {
       board: { columns, rows },
-    } = scene.levelConfig;
+    } = component.levelConfig;
 
     const cellSize = gameConfig.cellSize;
     const borderSize = 10;
@@ -49,40 +48,24 @@ export class GameBoardView extends Container {
       height + borderSize / 2
     );
 
-    scene.addChild(board);
+    component.addChild(board);
 
     /** Create tiles map */
     this.tilesMap = math
       .zeros(columns, rows)
-      .map(() => this.getRandomIndex()) as math.Matrix;
+      .map(() => this.component.getRandomIndex()) as math.Matrix;
 
     /** Draw tiles */
     this.tiles = this.tilesMap.map((tileIndex, [row, col]) => {
       const newTile = new BoardTile(tileIndex, { col, row });
-      scene.addChild(newTile);
+      component.addChild(newTile);
 
       newTile.eventMode = "dynamic";
-      newTile.on("pointertap", () => scene.onTileClick(newTile));
+      newTile.on("pointertap", () => component.onTileClick(newTile));
 
       return newTile;
     });
 
     console.log(this.tilesMap.toString());
-  }
-
-  getRandomIndex() {
-    const { tiles } = this.scene.levelConfig;
-
-    return randomInteger(0, tiles.length - 1);
-  }
-
-  addRandomTile(coord: TCoord) {
-    const newTile = new BoardTile(this.getRandomIndex(), coord);
-    newTile.eventMode = "dynamic";
-    newTile.on("pointertap", () => this.scene.onTileClick(newTile));
-    newTile.position.y -= gameConfig.cellSize;
-    this.scene.addChild(newTile);
-
-    return newTile;
   }
 }
