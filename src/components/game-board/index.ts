@@ -51,8 +51,12 @@ export class GameBoard extends Container {
     const { tiles } = this.renderView;
     let relativesParts: BoardTile[][] = [];
 
-    tiles.map((tile) => {
+    tiles.forEach((tile) => {
       if (tile === null) return;
+
+      for (const t of relativesParts) {
+        if (t.find((_t) => _t == tile)) return;
+      }
 
       const relatives = this.getRelatives(tile);
 
@@ -60,6 +64,8 @@ export class GameBoard extends Container {
         relativesParts.push(relatives);
       }
     });
+
+    console.log("playability", relativesParts.length, relativesParts);
 
     return relativesParts.length > 0;
   }
@@ -86,7 +92,8 @@ export class GameBoard extends Container {
   }
 
   getRelatives(currentTile: BoardTile, relatives: BoardTile[] = []) {
-    relatives.push(currentTile);
+    /** Add only unique tiles */
+    if (!relatives.find((r) => r === currentTile)) relatives.push(currentTile);
 
     const closeRelatives = this.getCloseRelatives(currentTile, relatives);
 
