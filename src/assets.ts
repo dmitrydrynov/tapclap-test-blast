@@ -11,6 +11,8 @@ export const manifest: ResolverManifest = {
         "tile-red": "./sprites/box-red.png",
         "tile-yellow": "./sprites/box-yellow.png",
         scoreBlock: "./sprites/score-block.png",
+        "panel-score": "./sprites/panel-score.png",
+        board: "./sprites/board.png",
       },
     },
   ],

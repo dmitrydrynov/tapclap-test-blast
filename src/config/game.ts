@@ -3,15 +3,15 @@ export const gameConfig: IGameConfig = {
   levels: [
     {
       name: "Demo Level",
-      minBurnGroup: 6,
+      minBurnGroup: 2,
       mixingAttempts: 3,
       board: {
-        columns: 8,
+        columns: 4,
         rows: 8,
       },
       tiles: ["red", "blue", "green", "purple", "yellow"],
       goal: {
-        steps: 25,
+        steps: 10,
         score: 100,
       },
     },

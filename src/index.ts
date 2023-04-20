@@ -7,7 +7,7 @@ const init = async () => {
 
   await font.load();
 
-  SceneManager.initialize(1920, 1080, 0xffff00);
+  SceneManager.initialize(1920, 1080, 0x132424);
   SceneManager.toScene(new LoaderScene());
 };
 

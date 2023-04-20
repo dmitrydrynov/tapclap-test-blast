@@ -10,6 +10,8 @@ export class GameBoard extends Container {
   options: {
     levelConfig: ILevelConfig;
     onMovesEnd: () => void;
+    onDiedTiles: (newScore: number) => void;
+    onUpdate: () => void;
   };
 
   constructor(options: any) {
@@ -30,6 +32,8 @@ export class GameBoard extends Container {
   }
 
   onBoardUpdate() {
+    this.options.onUpdate();
+
     if (!this.playability()) {
       this.emit<any>("movesEnd");
     }
@@ -37,7 +41,7 @@ export class GameBoard extends Container {
     this.fillEmptyBlocks();
   }
 
-  refresh() {    
+  refresh() {
     if (this.renderView) {
       this.renderView.destroy();
       this.renderView = new GameBoardView(this);
@@ -78,6 +82,11 @@ export class GameBoard extends Container {
     let relatives = this.getRelatives(tile);
 
     if (relatives.length >= this.options.levelConfig.minBurnGroup) {
+      const scores = relatives
+        .map((r) => r.config.score)
+        .reduce((a, b) => a + b, 0);
+      this.options.onDiedTiles(scores);
+
       for (const t of relatives) {
         const _coord = t.coord;
         tiles.set([_coord.row, _coord.col], null);

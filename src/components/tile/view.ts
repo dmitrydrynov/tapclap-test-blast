@@ -1,5 +1,5 @@
 import { gameConfig } from "@/config/game";
-import { Container, Sprite, Text } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 import { BoardTile } from "./component";
 
 export class BoardTileView extends Container {
@@ -21,10 +21,10 @@ export class BoardTileView extends Container {
 
     boardTile.addChild(this.sprite);
 
-    const idx = gameConfig.tiles.findIndex(
-      (t) => t.name == boardTile.config.name
-    );
-    const indexText = new Text(idx, { fontSize: 42 });
-    this.sprite.addChild(indexText);
+    // const idx = gameConfig.tiles.findIndex(
+    //   (t) => t.name == boardTile.config.name
+    // );
+    // const indexText = new Text(idx, { fontSize: 42 });
+    // this.sprite.addChild(indexText);
   }
 }
