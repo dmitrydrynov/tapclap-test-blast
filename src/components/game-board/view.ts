@@ -65,7 +65,5 @@ export class GameBoardView extends Container {
 
       return newTile;
     });
-
-    console.log(this.tilesMap.toString());
   }
 }

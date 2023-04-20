@@ -48,6 +48,7 @@ declare global {
     name: string;
     color: string;
     type: "basic";
+    score: number;
   }
 
   export interface IGameConfig {

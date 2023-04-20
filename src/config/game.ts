@@ -17,10 +17,10 @@ export const gameConfig: IGameConfig = {
     },
   ],
   tiles: [
-    { name: "red", color: "ff0000", type: "basic" },
-    { name: "blue", color: "0000ff", type: "basic" },
-    { name: "green", color: "00ff00", type: "basic" },
-    { name: "purple", color: "00ffff", type: "basic" },
-    { name: "yellow", color: "ffff00", type: "basic" },
+    { name: "red", color: "ff0000", type: "basic", score: 1 },
+    { name: "blue", color: "0000ff", type: "basic", score: 2 },
+    { name: "green", color: "00ff00", type: "basic", score: 3 },
+    { name: "purple", color: "00ffff", type: "basic", score: 4 },
+    { name: "yellow", color: "ffff00", type: "basic", score: 5 },
   ],
 };

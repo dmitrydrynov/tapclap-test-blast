@@ -31,8 +31,6 @@ export class GameScene extends Container implements IScene {
   }
 
   onMovesEnd() {
-    console.log("onMovesEnd");
-
     if (this.attempts < this.levelConfig.mixingAttempts) {
       this.refreshModal.open();
     } else {

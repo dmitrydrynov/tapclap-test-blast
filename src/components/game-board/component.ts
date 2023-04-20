@@ -30,19 +30,14 @@ export class GameBoard extends Container {
   }
 
   onBoardUpdate() {
-    console.log("onBoardUpdate");
-
     if (!this.playability()) {
-      console.log("you can not play");
       this.emit<any>("movesEnd");
     }
 
     this.fillEmptyBlocks();
   }
 
-  refresh() {
-    console.log('refresh')
-    
+  refresh() {    
     if (this.renderView) {
       this.renderView.destroy();
       this.renderView = new GameBoardView(this);
@@ -74,14 +69,10 @@ export class GameBoard extends Container {
       }
     });
 
-    console.log("playability", relativesParts.length, relativesParts);
-
     return relativesParts.length > 0;
   }
 
   onTileClick(tile: BoardTile) {
-    console.log("click to", tile.index, tile.coord);
-
     const { tiles } = this.renderView;
 
     let relatives = this.getRelatives(tile);
