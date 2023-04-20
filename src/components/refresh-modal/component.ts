@@ -15,14 +15,14 @@ export class RefreshModal extends Container {
     this.renderView = new ModalView(this);
 
     this.renderView.homeBtn.eventMode = "dynamic";
-    this.renderView.homeBtn.on("pointertap", this.onHomeClick, this);
+    this.renderView.homeBtn.onPress.connect(() => {
+      this.onHomeClick();
+    });
 
     this.renderView.refreshBtn.eventMode = "dynamic";
-    this.renderView.refreshBtn.on(
-      "pointertap",
-      this.options.onRefreshClick,
-      this
-    );
+    this.renderView.refreshBtn.onPress.connect(() => {
+      this.options.onRefreshClick();
+    });
 
     Ticker.shared.add(this.update, this);
   }

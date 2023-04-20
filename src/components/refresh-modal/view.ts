@@ -5,8 +5,8 @@ import { gameConfig } from "@/config/game";
 import { FancyButton } from "@pixi/ui";
 
 export class ModalView extends Container {
-  homeBtn: Container;
-  refreshBtn: Container;
+  homeBtn: FancyButton;
+  refreshBtn: FancyButton;
 
   constructor(component: RefreshModal) {
     super();

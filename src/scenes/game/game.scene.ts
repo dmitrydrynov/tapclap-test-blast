@@ -20,9 +20,7 @@ export class GameScene extends Container implements IScene {
       onRefreshClick: this.onRefreshClick.bind(this),
     });
 
-    const { refreshBtn } = this.renderView;
-
-    refreshBtn.onPress.connect(() => {
+    this.renderView.refreshBtn.onPress.connect(() => {
       this.renderView.gameBoard.refresh();
     });
   }
@@ -34,7 +32,7 @@ export class GameScene extends Container implements IScene {
   }
 
   onMovesEnd() {
-    this.refreshModal.open(this)
+    this.refreshModal.open(this);
   }
 
   update() {}
