@@ -6,7 +6,7 @@ export const gameConfig: IGameConfig = {
       minBurnGroup: 2,
       mixingAttempts: 3,
       board: {
-        columns: 4,
+        columns: 6,
         rows: 8,
       },
       tiles: ["red", "blue", "green", "purple", "yellow"],

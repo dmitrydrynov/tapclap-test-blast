@@ -30,8 +30,7 @@ export class GameView extends Container implements ISceneView {
 
     this.scorePanel = new ScorePanel();
     scene.addChild(this.scorePanel);
-    this.scorePanel.position.x =
-      this.gameBoard.position.x - this.gameBoard.width;
+    this.scorePanel.position.x = this.gameBoard.position.x - this.scorePanel.width - 100
     this.scorePanel.position.y = this.gameBoard.position.y;
   }
 }
