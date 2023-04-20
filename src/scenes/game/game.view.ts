@@ -1,5 +1,5 @@
 import { Container, Text } from "pixi.js";
-import { GameBoard } from "./components/game-board";
+import { GameBoard } from "@/components/game-board";
 import { SceneManager } from "@/sceneManager";
 import { gameConfig } from "@/config/game";
 import { GameScene } from "./game.scene";
