@@ -1,16 +1,18 @@
 import { Container, Ticker } from "pixi.js";
 import { ModalView } from "./view";
-import { Easing, Group, Tween } from "tweedle.js";
+import { Group, Tween } from "tweedle.js";
 import { SceneManager } from "@/sceneManager";
 import { HomeScene } from "@/scenes/home/home.scene";
 
 export class RefreshModal extends Container {
   renderView: ModalView;
   options: Record<string, any>;
+  scene: IScene;
 
-  constructor(options: Record<string, any>) {
+  constructor(scene: IScene, options: Record<string, any>) {
     super();
 
+    this.scene = scene;
     this.options = options;
     this.renderView = new ModalView(this);
 
@@ -27,19 +29,28 @@ export class RefreshModal extends Container {
     Ticker.shared.add(this.update, this);
   }
 
-  open(scene: IScene) {
-    scene.addChild(this);
+  open() {
+    this.scene.addChild(this);
+
+    this.renderView.background.eventMode = "static";
+
+    new Tween(this)
+      .to({ alpha: 1 }, 250)
+      // .easing(Easing.Back.In)
+      .start()
+      .onComplete(() => {});
   }
 
   close(callback = () => {}) {
+    this.renderView.background.eventMode = "none";
+
     new Tween(this)
-      .to({ scale: { x: 0.5, y: 0.5 }, alpha: 0 }, 250)
-      .easing(Easing.Back.In)
+      .to({ alpha: 0 }, 250)
       .start()
       .onComplete(() => {
         callback();
 
-        setTimeout(() => this.destroy(), 250);
+        this.scene.removeChild(this);
       });
   }
 

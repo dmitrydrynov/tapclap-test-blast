@@ -18,6 +18,8 @@ export class GameBoard extends Container {
     this.options = options;
     this.renderView = new GameBoardView(this);
 
+    if (!this.playability()) this.refresh();
+
     this.on<any>("boardUpdate", this.onBoardUpdate, this);
     this.on<any>("movesEnd", this.options.onMovesEnd, this);
     this.boardUpdate();
@@ -39,11 +41,18 @@ export class GameBoard extends Container {
   }
 
   refresh() {
+    console.log('refresh')
+    
     if (this.renderView) {
       this.renderView.destroy();
+      this.renderView = new GameBoardView(this);
+
+      while (!this.playability()) {
+        this.renderView.destroy();
+        this.renderView = new GameBoardView(this);
+      }
     }
 
-    this.renderView = new GameBoardView(this);
     this.boardUpdate();
   }
 

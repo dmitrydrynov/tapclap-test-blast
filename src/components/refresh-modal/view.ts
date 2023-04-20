@@ -7,6 +7,7 @@ import { FancyButton } from "@pixi/ui";
 export class ModalView extends Container {
   homeBtn: FancyButton;
   refreshBtn: FancyButton;
+  background: Graphics;
 
   constructor(component: RefreshModal) {
     super();
@@ -14,12 +15,11 @@ export class ModalView extends Container {
     const { width, height } = component.options;
 
     // Background
-    const bg = new Graphics();
-    bg.beginFill("000000aa");
-    bg.drawRect(0, 0, SceneManager.width, SceneManager.height);
-    bg.endFill();
-    bg.eventMode = "static";
-    component.addChild(bg);
+    this.background = new Graphics();
+    this.background.beginFill("000000aa");
+    this.background.drawRect(0, 0, SceneManager.width, SceneManager.height);
+    this.background.endFill();
+    component.addChild(this.background);
 
     // Body
     const body = new Graphics();
@@ -79,5 +79,7 @@ export class ModalView extends Container {
     body.addChild(this.homeBtn);
     this.homeBtn.position.x = (body.width - this.homeBtn.width) / 2 + 30;
     this.homeBtn.position.y = body.height - 150;
+
+    component.alpha = 0;
   }
 }

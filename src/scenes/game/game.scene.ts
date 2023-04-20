@@ -14,7 +14,7 @@ export class GameScene extends Container implements IScene {
     this.levelConfig = gameConfig.levels[0];
     this.renderView = new GameView(this);
 
-    this.refreshModal = new RefreshModal({
+    this.refreshModal = new RefreshModal(this, {
       width: 900,
       height: 500,
       onRefreshClick: this.onRefreshClick.bind(this),
@@ -27,12 +27,12 @@ export class GameScene extends Container implements IScene {
 
   onRefreshClick() {
     this.renderView.gameBoard.refresh();
-    // this.refreshModal.close();
-    this.removeChild(this.refreshModal);
+    this.refreshModal.close();
+    // this.removeChild(this.refreshModal);
   }
 
   onMovesEnd() {
-    this.refreshModal.open(this);
+    this.refreshModal.open();
   }
 
   update() {}
