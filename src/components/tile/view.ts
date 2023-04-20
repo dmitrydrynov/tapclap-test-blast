@@ -1,6 +1,6 @@
 import { gameConfig } from "@/config/game";
 import { Container, Sprite, Text } from "pixi.js";
-import { BoardTile } from ".";
+import { BoardTile } from "./component";
 
 export class BoardTileView extends Container {
   sprite: Sprite;

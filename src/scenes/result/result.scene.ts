@@ -4,28 +4,36 @@ import { HomeScene } from "@/scenes/home/home.scene";
 import { GameScene } from "@/scenes/game/game.scene";
 import { ResultView } from "./result.view";
 
+type TResultSceneOptions = {
+  success: boolean;
+};
+
 export class ResultScene extends Container implements IScene {
   renderView: ResultView;
+  success: boolean;
 
-  constructor() {
+  constructor({ success }: TResultSceneOptions) {
     super();
 
+    this.success = success;
     this.renderView = new ResultView(this);
 
-    const { textMenu, textRestart } = this.renderView;
+    const { homeBtn, restartBtn } = this.renderView;
 
-    textMenu.eventMode = "dynamic";
-    textMenu.on("pointertap", this.onClickMenu, this);
+    homeBtn.onPress.connect(() => {
+      this.onHomeClick();
+    });
 
-    textRestart.eventMode = "dynamic";
-    textRestart.on("pointertap", this.onClickRestart, this);
+    restartBtn.onPress.connect(() => {
+      this.onRestartClick();
+    });
   }
 
-  onClickRestart() {
-    SceneManager.toScene(new GameScene());
+  onRestartClick() {
+    SceneManager.toScene(new GameScene({ currentLevel: 0 }));
   }
 
-  onClickMenu() {
+  onHomeClick() {
     SceneManager.toScene(new HomeScene());
   }
 

@@ -12,15 +12,15 @@ export class HomeScene extends Container implements IScene {
     /** Init view */
     this.renderView = new HomeView(this);
 
-    const { boxBlue } = this.renderView;
+    const { startBtn } = this.renderView;
 
-    /** Set interactive */
-    boxBlue.on("pointertap", this.onClicky, this);
-    boxBlue.eventMode = "dynamic";
+    startBtn.onPress.connect(() => {
+      this.onStartGame();
+    });
   }
 
-  onClicky() {
-    SceneManager.toScene(new GameScene());
+  onStartGame() {
+    SceneManager.toScene(new GameScene({ currentLevel: 0 }));
   }
 
   update() {}

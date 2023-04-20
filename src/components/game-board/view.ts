@@ -1,8 +1,8 @@
 import { Container, Graphics } from "pixi.js";
 import * as math from "mathjs";
-import { BoardTile } from "../tile";
+import { BoardTile } from "@/components/tile/component";
 import { gameConfig } from "@/config/game";
-import { GameBoard } from ".";
+import { GameBoard } from "./component";
 
 export class GameBoardView extends Container {
   tilesMap: math.Matrix;

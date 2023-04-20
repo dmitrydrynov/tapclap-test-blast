@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { GameBoardView } from "./view";
-import { BoardTile } from "../tile";
+import { BoardTile } from "@/components/tile/component";
 import * as math from "mathjs";
 import { randomInteger } from "@/helpers/math";
 import { gameConfig } from "@/config/game";

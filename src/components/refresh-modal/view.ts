@@ -1,8 +1,8 @@
 import { Container, Graphics, Text } from "pixi.js";
 import { RefreshModal } from "./component";
 import { SceneManager } from "@/sceneManager";
-import { gameConfig } from "@/config/game";
 import { FancyButton } from "@pixi/ui";
+import { styleConfig } from "@/config/style";
 
 export class ModalView extends Container {
   homeBtn: FancyButton;
@@ -32,49 +32,23 @@ export class ModalView extends Container {
     body.position.y = (SceneManager.height - body.height) / 2;
 
     // Text
-    const textStyle = Object.assign({}, gameConfig.textStyle.text);
-    textStyle.fontSize = 56;
-    const text = new Text("You are out of moves", textStyle);
+    const text = new Text("You are out of moves", styleConfig.text.title);
     body.addChild(text);
     text.position.x = (body.width - text.width) / 2;
     text.position.y = 50;
 
     // Refresh Button
-    const refreshBtnStyle = Object.assign({}, gameConfig.textStyle.title);
-    refreshBtnStyle.fill = "006699";
     this.refreshBtn = new FancyButton({
-      text: new Text("Mix & Continue", refreshBtnStyle),
-      animations: {
-        hover: {
-          props: {
-            scale: {
-              x: 1.1,
-              y: 1.1,
-            },
-          },
-          duration: 100,
-        },
-      },
+      text: new Text("Mix & Continue", styleConfig.text.button),
+      animations: styleConfig.animations.buttonHover,
     });
     body.addChild(this.refreshBtn);
     this.refreshBtn.position.x = (body.width - this.refreshBtn.width) / 2 + 80;
     this.refreshBtn.position.y = body.height - 250;
 
-    const homeBtnStyle = Object.assign({}, gameConfig.textStyle.title);
-    homeBtnStyle.fill = "006699";
     this.homeBtn = new FancyButton({
-      text: new Text("Menu", homeBtnStyle),
-      animations: {
-        hover: {
-          props: {
-            scale: {
-              x: 1.1,
-              y: 1.1,
-            },
-          },
-          duration: 100,
-        },
-      },
+      text: new Text("Menu", styleConfig.text.button),
+      animations: styleConfig.animations.buttonHover,
     });
     body.addChild(this.homeBtn);
     this.homeBtn.position.x = (body.width - this.homeBtn.width) / 2 + 30;
