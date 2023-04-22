@@ -23,8 +23,9 @@ export class SceneManager {
 
     SceneManager.app = new Application({
       view: document.getElementById("game-canvas") as HTMLCanvasElement,
-      resolution: window.devicePixelRatio || 1,
+      resolution: 1,
       autoDensity: true,
+      antialias: true,
       backgroundColor: background,
       width,
       height,
@@ -64,14 +65,14 @@ export class SceneManager {
     );
 
     // uniform scale for our game
-    const scale = Math.min(
+    let scale = Math.min(
       screenWidth / SceneManager.width,
       screenHeight / SceneManager.height
     );
 
     // the "uniformly englarged" size for our game
-    const enlargedWidth = Math.floor(scale * SceneManager.width);
-    const enlargedHeight = Math.floor(scale * SceneManager.height);
+    let enlargedWidth = Math.floor(scale * SceneManager.width);
+    let enlargedHeight = Math.floor(scale * SceneManager.height);
 
     // margins for centering our game
     const horizontalMargin = (screenWidth - enlargedWidth) / 2;
