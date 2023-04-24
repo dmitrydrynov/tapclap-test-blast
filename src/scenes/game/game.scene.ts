@@ -61,11 +61,11 @@ export class GameScene extends Container implements IScene {
       });
     }
 
-    if (this.scores >= this.levelConfig.goal.score && this.steps > 0) {
+    if (this.scores >= this.levelConfig.goal.score && this.steps >= 0) {
       SceneManager.toScene(new ResultScene({ success: true }));
     }
 
-    if (this.steps == 0) {
+    if (this.steps == 0 && this.scores < this.levelConfig.goal.score) {
       SceneManager.toScene(new ResultScene({ success: false }));
     }
   }
