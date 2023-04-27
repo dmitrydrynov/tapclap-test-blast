@@ -3,6 +3,7 @@ import * as math from "mathjs";
 import { BoardTile } from "@/components/tile/component";
 import { gameConfig } from "@/config/game";
 import { GameBoard } from "./component";
+import { BoosterTile } from "../booster-tile/component";
 
 export class GameBoardView extends Container {
   tilesMap: math.Matrix;
@@ -174,5 +175,18 @@ export class GameBoardView extends Container {
     });
 
     return tiles;
+  }
+
+  addBoosterTile(config: IBoardBoosterConfig, coord: TCoord) {
+    const booster = new BoosterTile({
+      config,
+      coord,
+    });
+
+    this.component.addChild(booster);
+    this.tiles.set([coord.row, coord.col], booster);
+    booster.zIndex = 1;
+    booster.eventMode = "dynamic";
+    booster.on("pointertap", () => this.component.onBoosterTileClick(booster));
   }
 }

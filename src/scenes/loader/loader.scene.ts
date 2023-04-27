@@ -2,7 +2,7 @@ import { Assets, Container } from "pixi.js";
 import { SceneManager } from "@/sceneManager";
 import { manifest } from "@/assets";
 import { LoaderView } from "./loader.view";
-import { HomeScene } from "../home/home.scene";
+import { HomeScene } from "@/scenes/home/home.scene";
 
 export class LoaderScene extends Container implements IScene {
   renderView: LoaderView;
@@ -29,7 +29,9 @@ export class LoaderScene extends Container implements IScene {
   }
 
   private gameLoaded(): void {
-    SceneManager.toScene(new HomeScene());
+    setTimeout(() => {
+      SceneManager.toScene(new HomeScene());
+    }, 600);
   }
 
   update() {}

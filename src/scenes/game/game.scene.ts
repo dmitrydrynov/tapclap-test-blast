@@ -35,8 +35,6 @@ export class GameScene extends Container implements IScene {
   onDiedTiles(newScore: number) {
     this.scores += newScore;
     this.steps--;
-
-    console.log(this.steps, this.scores);
   }
 
   onRefreshClick() {

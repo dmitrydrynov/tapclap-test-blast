@@ -38,6 +38,7 @@ declare global {
       rows: number;
     };
     tiles: string[];
+    boosters: string[];
     goal: {
       steps: number;
       score: number;
@@ -46,9 +47,16 @@ declare global {
 
   export interface IBoardTileConfig {
     name: string;
-    color: string;
     type: "basic";
+    color?: string;
     score: number;
+    params?: Record<string, any>;
+  }
+
+  export interface IBoardBoosterConfig {
+    name: string;
+    type: "collector";
+    params: Record<string, any>;
   }
 
   export interface IGameConfig {
@@ -56,6 +64,7 @@ declare global {
 
     levels: ILevelConfig[];
     tiles: IBoardTileConfig[];
+    boosters: IBoardBoosterConfig[];
   }
 
   export interface IStyleConfig {

@@ -4,6 +4,7 @@ import { BoardTile } from "@/components/tile/component";
 import * as math from "mathjs";
 import { randomInteger } from "@/helpers/math";
 import { gameConfig } from "@/config/game";
+import { BoosterTile } from "@/components/booster-tile/component";
 
 export class GameBoard extends Container {
   renderView: GameBoardView;
@@ -87,9 +88,12 @@ export class GameBoard extends Container {
         .reduce((a, b) => a + b, 0);
       this.options.onDiedTiles(scores);
 
+      const isBooster = this.tryRunBoosters(tile, relatives);
+
       for (const t of relatives) {
-        const _coord = t.coord;
-        tiles.set([_coord.row, _coord.col], null);
+        if (!(isBooster && tile.coord == t.coord)) {
+          tiles.set([t.coord.row, t.coord.col], null);
+        }
 
         t.remove(() => {
           this.removeChild(t);
@@ -98,6 +102,35 @@ export class GameBoard extends Container {
         });
       }
     }
+  }
+
+  onBoosterTileClick(tile: BoosterTile) {
+    console.log("booster click", tile.config);
+  }
+
+  tryRunBoosters(activeTile: BoardTile, relatives: BoardTile[]) {
+    let isBooster = false;
+
+    console.log("tryRunBoosters", activeTile.coord);
+
+    for (const boosterName of this.options.levelConfig.boosters) {
+      const boosterConfig = gameConfig.boosters.find(
+        (b) => b.name == boosterName
+      );
+
+      if (
+        boosterConfig &&
+        boosterConfig.type == "collector" &&
+        relatives.length == boosterConfig.params.activeWhen
+      ) {
+        this.renderView.addBoosterTile(boosterConfig, activeTile.coord);
+
+        isBooster = true;
+        break;
+      }
+    }
+
+    return isBooster;
   }
 
   getRelatives(currentTile: BoardTile, relatives: BoardTile[] = []) {
@@ -162,7 +195,7 @@ export class GameBoard extends Container {
 
     for (let col = 0; col < this.options.levelConfig.board.columns; col++) {
       for (let row = this.options.levelConfig.board.rows - 1; row >= 0; row--) {
-        const tile: BoardTile | null = tiles.get([row, col]);
+        const tile: BoardTile | BoosterTile | null = tiles.get([row, col]);
         let lastRow = row + 1;
         let newTopTile: BoardTile | null = null;
         let tileBelow: BoardTile | null | undefined =

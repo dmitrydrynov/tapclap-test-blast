@@ -1,11 +1,11 @@
 import { gameConfig } from "@/config/game";
 import { Container, Sprite } from "pixi.js";
-import { BoardTile } from "./component";
+import { BoosterTile } from "./component";
 
-export class BoardTileView extends Container {
+export class BoosterTileView extends Container {
   sprite: Sprite;
 
-  constructor(boardTile: BoardTile) {
+  constructor(boardTile: BoosterTile) {
     super();
 
     const cellSize = gameConfig.cellSize;

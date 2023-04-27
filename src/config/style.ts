@@ -39,6 +39,12 @@ export const styleConfig: IStyleConfig = {
       fontSize: 36,
       fontFamily: "Marvin",
     }),
+    buttonBlack: new TextStyle({
+      align: "center",
+      fill: "#000000",
+      fontSize: 36,
+      fontFamily: "Marvin",
+    }),
   },
   animations: {
     buttonHover: {

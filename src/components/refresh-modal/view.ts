@@ -39,7 +39,7 @@ export class ModalView extends Container {
 
     // Refresh Button
     this.refreshBtn = new FancyButton({
-      text: new Text("Mix & Continue", styleConfig.text.button),
+      text: new Text("Mix & Continue", styleConfig.text.buttonBlack),
       animations: styleConfig.animations.buttonHover,
     });
     body.addChild(this.refreshBtn);
@@ -47,7 +47,7 @@ export class ModalView extends Container {
     this.refreshBtn.position.y = body.height - 250;
 
     this.homeBtn = new FancyButton({
-      text: new Text("Menu", styleConfig.text.button),
+      text: new Text("Menu", styleConfig.text.buttonBlack),
       animations: styleConfig.animations.buttonHover,
     });
     body.addChild(this.homeBtn);

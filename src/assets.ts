@@ -13,6 +13,8 @@ export const manifest: ResolverManifest = {
         scoreBlock: "./sprites/score-block.png",
         "panel-score": "./sprites/panel-score.png",
         board: "./sprites/board.png",
+        "progres-bar": "./sprites/progress-bar.png",
+        "tile-bomb": "./sprites/tile-bomb.png"
       },
     },
   ],

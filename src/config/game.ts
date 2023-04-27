@@ -10,6 +10,7 @@ export const gameConfig: IGameConfig = {
         rows: 8,
       },
       tiles: ["red", "blue", "green", "purple", "yellow"],
+      boosters: ["bomb"],
       goal: {
         steps: 10,
         score: 100,
@@ -22,5 +23,8 @@ export const gameConfig: IGameConfig = {
     { name: "green", color: "00ff00", type: "basic", score: 3 },
     { name: "purple", color: "00ffff", type: "basic", score: 4 },
     { name: "yellow", color: "ffff00", type: "basic", score: 5 },
+  ],
+  boosters: [
+    { name: "bomb", type: "collector", params: { activeWhen: 5, radius: 2 } },
   ],
 };

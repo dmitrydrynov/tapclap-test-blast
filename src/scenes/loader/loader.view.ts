@@ -1,39 +1,107 @@
-import { Container, Graphics } from "pixi.js";
+import { Container, Sprite, Spritesheet, Texture } from "pixi.js";
 import { SceneManager } from "@/sceneManager";
+import { LoaderScene } from "./loader.scene";
 
 export class LoaderView extends Container {
-  loaderBar: Container;
-  loaderBarBorder: Graphics;
-  loaderBarFill: Graphics;
+  scene: LoaderScene;
+  loaderBar?: Container;
+  loaderBarFill?: {
+    left: Sprite;
+    center: Sprite;
+    right: Sprite;
+  };
 
-  constructor(scene: Container) {
+  constructor(scene: LoaderScene) {
     super();
 
+    this.scene = scene;
+    this.renderProgressBar();
+  }
+
+  async renderProgressBar() {
     const loaderBarWidth = SceneManager.width * 0.8;
 
-    // the fill of the bar.
-    this.loaderBarFill = new Graphics();
-    this.loaderBarFill.beginFill(0x008800, 1);
-    this.loaderBarFill.drawRect(0, 0, loaderBarWidth, 50);
-    this.loaderBarFill.endFill();
-    this.loaderBarFill.scale.x = 0;
-
-    // The border of the bar.
-    this.loaderBarBorder = new Graphics();
-    this.loaderBarBorder.lineStyle(10, 0x0, 1);
-    this.loaderBarBorder.drawRect(0, 0, loaderBarWidth, 50);
-
     this.loaderBar = new Container();
-    this.loaderBar.addChild(this.loaderBarFill);
-    this.loaderBar.addChild(this.loaderBarBorder);
 
+    const progressBarSheet = new Spritesheet(
+      Texture.from("./sprites/progress-bar.png"),
+      {
+        meta: { scale: "1" },
+        frames: {
+          fillLeft: {
+            frame: { x: 0, y: 0, w: 50, h: 85 },
+          },
+          fillCenter: {
+            frame: { x: 50, y: 0, w: 10, h: 85 },
+          },
+          fillRight: {
+            frame: { x: 206, y: 0, w: 50, h: 85 },
+          },
+          barLeft: {
+            frame: { x: 0, y: 87, w: 50, h: 105 },
+          },
+          barCenter: {
+            frame: { x: 50, y: 87, w: 10, h: 105 },
+          },
+          barRight: {
+            frame: { x: 206, y: 87, w: 50, h: 105 },
+          },
+        },
+      }
+    );
+
+    const progressBarTextures = await progressBarSheet.parse();
+
+    const barLeft = new Sprite(progressBarTextures.barLeft);
+    this.loaderBar.addChild(barLeft);
+    barLeft.position.set(0, 0);
+
+    const barRight = new Sprite(progressBarTextures.barRight);
+    this.loaderBar.addChild(barRight);
+    barRight.position.set(loaderBarWidth - barRight.width, 0);
+
+    const barCenter = new Sprite(progressBarTextures.barCenter);
+    this.loaderBar.addChild(barCenter);
+    barCenter.position.set(50, 0);
+    barCenter.width = loaderBarWidth - barLeft.width - barRight.width;
+
+    const fillLeft = new Sprite(progressBarTextures.fillLeft);
+    this.loaderBar.addChild(fillLeft);
+    fillLeft.position.set(8, 8);
+
+    const fillRight = new Sprite(progressBarTextures.fillRight);
+    this.loaderBar.addChild(fillRight);
+    fillRight.position.set(8 + 50, 8);
+
+    const fillCenter = new Sprite(progressBarTextures.fillCenter);
+    this.loaderBar.addChild(fillCenter);
+    fillCenter.position.set(50, 8);
+    fillCenter.width = 0;
+
+    this.loaderBarFill = {
+      left: fillLeft,
+      center: fillCenter,
+      right: fillRight,
+    };
+
+    this.loaderBar.scale.set(0.5);
     this.loaderBar.position.x = (SceneManager.width - this.loaderBar.width) / 2;
     this.loaderBar.position.y =
       (SceneManager.height - this.loaderBar.height) / 2;
-    scene.addChild(this.loaderBar);
+
+    this.scene.addChild(this.loaderBar);
   }
 
   updateProgress(progressRatio: number): void {
-    this.loaderBarFill.scale.x = progressRatio;
+    if (!this.loaderBarFill) return;
+
+    const loaderBarWidth = SceneManager.width * 0.8;
+    const progressWidth =
+      progressRatio * (loaderBarWidth - this.loaderBarFill.right.width);
+
+    if (progressWidth < 100) return;
+
+    this.loaderBarFill.right.position.x = progressWidth - 8;
+    this.loaderBarFill.center.width = progressWidth - 50;
   }
 }
