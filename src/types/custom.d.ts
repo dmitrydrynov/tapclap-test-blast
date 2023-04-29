@@ -55,6 +55,7 @@ declare global {
 
   export interface IBoardBoosterConfig {
     name: string;
+    score: number;
     type: "collector";
     params: Record<string, any>;
   }

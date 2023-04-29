@@ -16,7 +16,7 @@ export class GameBoardView extends Container {
     super();
 
     this.component = component;
-    this.component.sortableChildren = true;
+    this.sortableChildren = true;
 
     const {
       board: { columns, rows },
@@ -33,7 +33,8 @@ export class GameBoardView extends Container {
 
     this.drawBoard();
     this.tiles = this.drawTiles();
-    // this.drawTestGrid();
+
+    component.addChild(this);
   }
 
   async drawBoard() {
@@ -71,6 +72,7 @@ export class GameBoardView extends Container {
 
     /** Createe board */
     const boardContainer = new Container();
+
     const board = new Graphics();
     /** background */
     board.beginFill("001E3B");
@@ -117,7 +119,7 @@ export class GameBoardView extends Container {
     right.position.set(rightTop.x, rightTop.height);
     right.height = this.boardHeight - rightTop.height - rightBottom.height;
 
-    this.component.addChild(boardContainer);
+    this.addChild(boardContainer);
     boardContainer.zIndex = 0;
     boardContainer.position.x -= 50;
     boardContainer.position.y -= 50;
@@ -158,14 +160,14 @@ export class GameBoardView extends Container {
       this.boardHeight + borderSize / 2
     );
 
-    this.component.addChild(board);
+    this.addChild(board);
   }
 
   drawTiles() {
     /** Draw tiles */
     const tiles = this.tilesMap.map((tileIndex, [row, col]) => {
       const newTile = new BoardTile(tileIndex, { col, row });
-      this.component.addChild(newTile);
+      this.addChild(newTile);
       newTile.zIndex = 1;
 
       newTile.eventMode = "dynamic";
@@ -183,10 +185,11 @@ export class GameBoardView extends Container {
       coord,
     });
 
-    this.component.addChild(booster);
+    this.addChild(booster);
     this.tiles.set([coord.row, coord.col], booster);
     booster.zIndex = 1;
     booster.eventMode = "dynamic";
+    booster.birthAnimation();
     booster.on("pointertap", () => this.component.onBoosterTileClick(booster));
   }
 }

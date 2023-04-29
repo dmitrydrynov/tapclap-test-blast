@@ -53,13 +53,13 @@ export class BoosterTile extends Container {
       });
   }
 
-  moveToWithAlpha(newCoord: TCoord, callback = () => {}) {
-    const newPosition = coordToPosition(newCoord);
-    this.coord = newCoord;
+  birthAnimation(callback = () => {}) {
+    this.scale.set(0.5);
+    this.alpha = 0;
 
     new Tween(this)
-      .to({ ...newPosition, alpha: 1 }, 250)
-      .easing(Easing.Sinusoidal.In)
+      .to({ scale: { x: 1, y: 1 }, alpha: 1 }, 250)
+      .easing(Easing.Sinusoidal.Out)
       .start()
       .onComplete(() => {
         callback();

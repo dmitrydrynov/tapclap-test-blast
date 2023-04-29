@@ -1,4 +1,4 @@
-import { Container } from "pixi.js";
+import { Container, Matrix } from "pixi.js";
 import { GameBoardView } from "./view";
 import { BoardTile } from "@/components/tile/component";
 import * as math from "mathjs";
@@ -78,40 +78,61 @@ export class GameBoard extends Container {
   }
 
   onTileClick(tile: BoardTile) {
-    const { tiles } = this.renderView;
-
     let relatives = this.getRelatives(tile);
 
     if (relatives.length >= this.options.levelConfig.minBurnGroup) {
-      const scores = relatives
-        .map((r) => r.config.score)
-        .reduce((a, b) => a + b, 0);
-      this.options.onDiedTiles(scores);
+      this.removeRelatives(tile, relatives);
+    }
+  }
 
-      const isBooster = this.tryRunBoosters(tile, relatives);
+  removeRelatives(activeTile: any, relatives: BoardTile[]) {
+    const scores = relatives
+      .map((r) => r.config.score)
+      .reduce((a, b) => a + b, 0);
+    this.options.onDiedTiles(scores);
 
-      for (const t of relatives) {
-        if (!(isBooster && tile.coord == t.coord)) {
-          tiles.set([t.coord.row, t.coord.col], null);
-        }
+    const isBooster = this.tryStartBoosters(activeTile, relatives);
 
-        t.remove(() => {
-          this.removeChild(t);
-
-          this.boardUpdate();
-        });
+    for (const t of relatives) {
+      if (!(isBooster && activeTile.coord == t.coord)) {
+        this.renderView.tiles.set([t.coord.row, t.coord.col], null);
       }
+
+      t.remove(() => {
+        this.removeChild(t);
+        this.boardUpdate();
+      });
     }
   }
 
   onBoosterTileClick(tile: BoosterTile) {
-    console.log("booster click", tile.config);
+    const { tiles } = this.renderView;
+    const { row, col } = tile.coord;
+
+    const rowsForSearch = Array(tile.config.params.radius * 2 + 1)
+      .fill(0)
+      .map((_, i) => row - tile.config.params.radius + i)
+      .filter((row) => row >= 0 && row < this.options.levelConfig.board.rows);
+
+    const colsForSearch = Array(tile.config.params.radius * 2 + 1)
+      .fill(0)
+      .map((_, i) => col - tile.config.params.radius + i)
+      .filter(
+        (col) => col >= 0 && col < this.options.levelConfig.board.columns
+      );
+
+    const neighbours = tiles.subset(math.index(rowsForSearch, colsForSearch));
+    const relatives: BoardTile[] = [];
+
+    neighbours.forEach((v) => {
+      relatives.push(v);
+    });
+
+    this.removeRelatives(tile, relatives);
   }
 
-  tryRunBoosters(activeTile: BoardTile, relatives: BoardTile[]) {
+  tryStartBoosters(activeTile: BoardTile, relatives: BoardTile[]) {
     let isBooster = false;
-
-    console.log("tryRunBoosters", activeTile.coord);
 
     for (const boosterName of this.options.levelConfig.boosters) {
       const boosterConfig = gameConfig.boosters.find(
@@ -251,20 +272,23 @@ export class GameBoard extends Container {
     newTile.eventMode = "dynamic";
     newTile.on("pointertap", () => this.onTileClick(newTile));
 
-    this.addChild(newTile);
+    this.renderView.addChild(newTile);
 
     return newTile;
   }
 
   shuffle() {
     const { tiles } = this.renderView;
-    const oldTiles = Object.assign({}, tiles);
+    const [rows, cols] = tiles.size();
+    // const oldTiles = tiles.clone();
+    // const oldTiles = Object.assign({}, tiles);
+    const newTiles = math.zeros(rows, cols) as math.Matrix;
 
-    tiles.forEach((tile, [row, col]) => {
+    tiles.forEach((tile: BoardTile, [row, col]) => {
       let newCol = Math.floor(Math.random() * (col + 1));
       let newRow = Math.floor(Math.random() * (row + 1));
 
-      oldTiles.set([newRow, newCol], tile);
+      newTiles.set([newRow, newCol], tile);
     });
   }
 }
