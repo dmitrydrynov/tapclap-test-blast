@@ -38,7 +38,7 @@ export class GameScene extends Container implements IScene {
   }
 
   onRefreshClick() {
-    this.renderView.gameBoard.refresh();
+    this.renderView.gameBoard.shuffle();
     this.refreshModal.close();
     this.attempts++;
   }

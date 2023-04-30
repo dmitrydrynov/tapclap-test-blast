@@ -6,8 +6,9 @@ import { GameBoard } from "./component";
 import { BoosterTile } from "../booster-tile/component";
 
 export class GameBoardView extends Container {
-  tilesMap: math.Matrix;
   tiles: math.Matrix;
+  tilesContainer: Container;
+  boardContainer: Container;
   component: GameBoard;
   boardWidth: number;
   boardHeight: number;
@@ -15,24 +16,23 @@ export class GameBoardView extends Container {
   constructor(component: GameBoard) {
     super();
 
-    this.component = component;
-    this.sortableChildren = true;
-
     const {
       board: { columns, rows },
     } = component.options.levelConfig;
 
-    /** Create tiles map */
-    this.tilesMap = math
-      .zeros(rows, columns)
-      .map(() => this.component.getRandomIndex()) as math.Matrix;
+    /** Setting for containers order */
+    this.sortableChildren = true;
 
-    const cellSize = gameConfig.cellSize;
-    this.boardWidth = columns * cellSize + 100;
-    this.boardHeight = rows * cellSize + 100;
+    /** Init data */
+    this.component = component;
+    this.tiles = math.zeros([rows, columns]) as math.Matrix;
+    this.tilesContainer = new Container();
+    this.boardContainer = new Container();
+    this.boardWidth = columns * gameConfig.cellSize + 100;
+    this.boardHeight = rows * gameConfig.cellSize + 100;
 
     this.drawBoard();
-    this.tiles = this.drawTiles();
+    this.drawTiles(this.component.tilesMap);
 
     component.addChild(this);
   }
@@ -70,113 +70,76 @@ export class GameBoardView extends Container {
 
     const textures = await sheet.parse();
 
-    /** Createe board */
-    const boardContainer = new Container();
-
     const board = new Graphics();
     /** background */
     board.beginFill("001E3B");
     board.drawRect(100, 100, this.boardWidth - 200, this.boardHeight - 200);
     board.endFill();
-    boardContainer.addChild(board);
+    this.boardContainer.addChild(board);
 
     const leftTop = new Sprite(textures.leftTop);
-    boardContainer.addChild(leftTop);
+    this.boardContainer.addChild(leftTop);
     leftTop.position.set(0, 0);
 
     const rightTop = new Sprite(textures.rightTop);
-    boardContainer.addChild(rightTop);
+    this.boardContainer.addChild(rightTop);
     rightTop.position.set(this.boardWidth - rightTop.width, 0);
 
     const leftBottom = new Sprite(textures.leftBottom);
-    boardContainer.addChild(leftBottom);
+    this.boardContainer.addChild(leftBottom);
     leftBottom.position.set(0, this.boardHeight - leftBottom.height);
 
     const rightBottom = new Sprite(textures.rightBottom);
-    boardContainer.addChild(rightBottom);
+    this.boardContainer.addChild(rightBottom);
     rightBottom.position.set(
       this.boardWidth - rightTop.width,
       this.boardHeight - leftBottom.height
     );
 
     const top = new Sprite(textures.top);
-    boardContainer.addChild(top);
+    this.boardContainer.addChild(top);
     top.position.set(leftTop.width, 0);
     top.width = this.boardWidth - leftTop.width - rightTop.width;
 
     const bottom = new Sprite(textures.bottom);
-    boardContainer.addChild(bottom);
+    this.boardContainer.addChild(bottom);
     bottom.position.set(leftBottom.width, this.boardHeight - leftBottom.height);
     bottom.width = this.boardWidth - leftBottom.width - rightBottom.width;
 
     const left = new Sprite(textures.left);
-    boardContainer.addChild(left);
+    this.boardContainer.addChild(left);
     left.position.set(0, leftTop.height);
     left.height = this.boardHeight - leftTop.height - leftBottom.height;
 
     const right = new Sprite(textures.right);
-    boardContainer.addChild(right);
+    this.boardContainer.addChild(right);
     right.position.set(rightTop.x, rightTop.height);
     right.height = this.boardHeight - rightTop.height - rightBottom.height;
 
-    this.addChild(boardContainer);
-    boardContainer.zIndex = 0;
-    boardContainer.position.x -= 50;
-    boardContainer.position.y -= 50;
+    this.addChild(this.boardContainer);
+
+    this.boardContainer.zIndex = 0;
+    this.boardContainer.position.x -= 50;
+    this.boardContainer.position.y -= 50;
   }
 
-  drawTestGrid() {
-    const {
-      board: { columns, rows },
-    } = this.component.options.levelConfig;
+  drawTiles(tilesMap: math.Matrix) {
+    this.tilesContainer.removeChildren();
 
-    const cellSize = gameConfig.cellSize;
-    const borderSize = 10;
-    this.boardWidth = columns * cellSize;
-    this.boardHeight = rows * cellSize;
-
-    /** Createe board */
-    const board = new Graphics();
-    /** background */
-    board.beginFill(0xffffff);
-    board.drawRect(0, 0, this.boardWidth, this.boardHeight);
-    board.endFill();
-    /** grid */
-    board.lineStyle(3, "00000020");
-    for (let r = 1; r < rows; r++) {
-      board.moveTo(0, r * cellSize);
-      board.lineTo(this.boardWidth, r * cellSize);
-    }
-    for (let c = 1; c < columns; c++) {
-      board.moveTo(c * cellSize, 0);
-      board.lineTo(c * cellSize, this.boardHeight);
-    }
-    /** border */
-    board.lineStyle(borderSize, 0x000000);
-    board.drawRect(
-      -borderSize / 2,
-      -borderSize / 2,
-      this.boardWidth + borderSize / 2,
-      this.boardHeight + borderSize / 2
-    );
-
-    this.addChild(board);
-  }
-
-  drawTiles() {
-    /** Draw tiles */
-    const tiles = this.tilesMap.map((tileIndex, [row, col]) => {
+    const tiles = tilesMap.map((tileIndex, [row, col]) => {
       const newTile = new BoardTile(tileIndex, { col, row });
-      this.addChild(newTile);
-      newTile.zIndex = 1;
-
       newTile.eventMode = "dynamic";
       newTile.on("pointertap", () => this.component.onTileClick(newTile));
+
+      this.tilesContainer.addChild(newTile);
 
       return newTile;
     });
 
-    return tiles;
+    this.tilesContainer.zIndex = 1;
+    this.tiles = tiles;
+
+    this.addChild(this.tilesContainer);
   }
 
   addBoosterTile(config: IBoardBoosterConfig, coord: TCoord) {

@@ -3,7 +3,7 @@ export const gameConfig: IGameConfig = {
   levels: [
     {
       name: "Demo Level",
-      minBurnGroup: 5,
+      minBurnGroup: 2,
       mixingAttempts: 3,
       board: {
         columns: 6,
@@ -25,6 +25,6 @@ export const gameConfig: IGameConfig = {
     { name: "yellow", color: "ffff00", type: "basic", score: 5 },
   ],
   boosters: [
-    { name: "bomb", score: 0, type: "collector", params: { activeWhen: 3, radius: 2 } },
+    { name: "bomb", score: 0, type: "collector", params: { activeWhen: 4, radius: 2 } },
   ],
 };

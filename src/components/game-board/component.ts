@@ -1,4 +1,4 @@
-import { Container, Matrix } from "pixi.js";
+import { Container } from "pixi.js";
 import { GameBoardView } from "./view";
 import { BoardTile } from "@/components/tile/component";
 import * as math from "mathjs";
@@ -8,6 +8,7 @@ import { BoosterTile } from "@/components/booster-tile/component";
 
 export class GameBoard extends Container {
   renderView: GameBoardView;
+  tilesMap: math.Matrix;
   options: {
     levelConfig: ILevelConfig;
     onMovesEnd: () => void;
@@ -19,24 +20,33 @@ export class GameBoard extends Container {
     super();
 
     this.options = options;
+
+    /** Generate tiles map */
+    this.tilesMap = this.generateTilesMap();
+
+    /** Render game board & tiles */
     this.renderView = new GameBoardView(this);
 
     if (!this.playability()) this.refresh();
 
-    this.on<any>("boardUpdate", this.onBoardUpdate, this);
-    this.on<any>("movesEnd", this.options.onMovesEnd, this);
     this.boardUpdate();
   }
 
-  boardUpdate() {
-    this.emit<any>("boardUpdate");
+  generateTilesMap() {
+    const {
+      board: { columns, rows },
+    } = this.options.levelConfig;
+
+    return math
+      .zeros(rows, columns)
+      .map(() => this.getRandomIndex()) as math.Matrix;
   }
 
-  onBoardUpdate() {
+  boardUpdate() {
     this.options.onUpdate();
 
     if (!this.playability()) {
-      this.emit<any>("movesEnd");
+      this.options.onMovesEnd();
     }
 
     this.fillEmptyBlocks();
@@ -44,16 +54,48 @@ export class GameBoard extends Container {
 
   refresh() {
     if (this.renderView) {
+      this.tilesMap = this.generateTilesMap();
+
       this.renderView.destroy();
       this.renderView = new GameBoardView(this);
 
       while (!this.playability()) {
+        this.tilesMap = this.generateTilesMap();
+
         this.renderView.destroy();
         this.renderView = new GameBoardView(this);
       }
     }
 
     this.boardUpdate();
+  }
+
+  shuffle() {
+    this.tilesMap = this.shuffleTilesMap();
+    this.renderView.destroy();
+    this.renderView = new GameBoardView(this);
+
+    while (!this.playability()) {
+      this.tilesMap = this.shuffleTilesMap();
+
+      this.renderView.destroy();
+      this.renderView = new GameBoardView(this);
+    }
+
+    this.boardUpdate();
+  }
+
+  shuffleTilesMap() {
+    const newTilesMap = this.tilesMap.clone();
+
+    this.tilesMap.forEach((value, [row, col]) => {
+      let newCol = Math.floor(Math.random() * (col + 1));
+      let newRow = Math.floor(Math.random() * (row + 1));
+
+      newTilesMap.set([newRow, newCol], value);
+    });
+
+    return newTilesMap;
   }
 
   playability() {
@@ -275,20 +317,5 @@ export class GameBoard extends Container {
     this.renderView.addChild(newTile);
 
     return newTile;
-  }
-
-  shuffle() {
-    const { tiles } = this.renderView;
-    const [rows, cols] = tiles.size();
-    // const oldTiles = tiles.clone();
-    // const oldTiles = Object.assign({}, tiles);
-    const newTiles = math.zeros(rows, cols) as math.Matrix;
-
-    tiles.forEach((tile: BoardTile, [row, col]) => {
-      let newCol = Math.floor(Math.random() * (col + 1));
-      let newRow = Math.floor(Math.random() * (row + 1));
-
-      newTiles.set([newRow, newCol], tile);
-    });
   }
 }
